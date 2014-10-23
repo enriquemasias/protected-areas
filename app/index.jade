@@ -19,6 +19,12 @@ html(lang='en')
   body
     .l-index
       .m-map#mapView
+      .m-story#storyView
+      .m-timeline#timelineView
+        .timeline-controls
+          .play-btn play
+          .stop-btn.hidden stop
+        .timeline-svg#svgContainer
 
     //- Screen size
     include views/screen_size

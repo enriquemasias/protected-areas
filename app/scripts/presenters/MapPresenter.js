@@ -7,6 +7,7 @@ define([
   'views/MapView',
   'abstract/MpsClass',
 ], function($, _, _string, mps, Backbone, MapView, MpsClass) {
+
   'use strict';
 
   var StatusModel = Backbone.Model.extend({
@@ -23,6 +24,8 @@ define([
       'Router/init': function(route) {
         this.status.set(_.pick(route,
           'zoom', 'center', 'basemap'));
+
+        this.view.addProtectedAreasLayer();
         this.view.map.setView(route.center, route.zoom);
       }
     }, {
@@ -37,6 +40,10 @@ define([
       'Map/basemap-change': function(name) {
         this.status.set('basemap', name);
         mps.publish('Router/update', []);
+      }
+    }, {
+      'Timeline/date-change': function(date) {
+        this.view.updateProtectedAreas(date);
       }
     }],
 

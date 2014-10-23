@@ -4,8 +4,9 @@ define([
   'handlebars',
   'presenters/RouterPresenter',
   'presenters/MapPresenter',
+  'presenters/TimelinePresenter',
   'helpers/underscoreMixinsHelper'
-], function(_, Backbone, Handlebars, Presenter, MapPresenter) {
+], function(_, Backbone, Handlebars, Presenter, MapPresenter, TimelinePresenter) {
 
   'use strict';
 
@@ -31,6 +32,7 @@ define([
       if (!this.initialized) {
         // Set router-registrable presenters
         new MapPresenter();
+        new TimelinePresenter();
       }
 
       var params = _.extend({

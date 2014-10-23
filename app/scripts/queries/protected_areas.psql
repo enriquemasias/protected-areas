@@ -1,0 +1,3 @@
+select the_geom, the_geom_webmercator
+from protected_areas
+where status_yr < %(year)s

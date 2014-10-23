@@ -1,17 +1,19 @@
 define([
   'underscore',
-  'backbone'
-], function(_, Backbone) {
+  'backbone',
+  'text!queries/protected_areas.psql',
+  'text!cartocss/protected_areas.cartocss'
+], function(_, Backbone, PROTECTED_AREAS_PSQL, PROTECTED_AREAS_CSS) {
   'use strict';
 
   /**
    * Basemap tile url.
    */
   var TILE_LAYERS = {
-    default: 'https://4.maps.nlp.nokia.com/maptile/2.1/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?lg=eng&token=A7tBPacePg9Mj_zghvKt9Q&app_id=KuYppsdXZznpffJsKT24',
+    default: 'https://cartocdn_{s}.global.ssl.fastly.net/base-antique/{z}/{x}/{y}.png',
+    'nokia-day': 'https://4.maps.nlp.nokia.com/maptile/2.1/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?lg=eng&token=A7tBPacePg9Mj_zghvKt9Q&app_id=KuYppsdXZznpffJsKT24',
     terrain: 'https://{s}.tiles.mapbox.com/v3/mapbox.natural-earth-hypso/{z}/{x}/{y}.png',
     satellite: 'https://{s}.tiles.mapbox.com/v3/mapbox.blue-marble-topo-bathy-jan/{z}/{x}/{y}.png',
-    'blue-marble': 'https://{s}.tiles.mapbox.com/v3/mapbox.blue-marble-topo-bathy-jul-bw/{z}/{x}/{y}.png',
     'cartodb-eco': 'https://cartocdn_{s}.global.ssl.fastly.net/base-eco/{z}/{x}/{y}.png'
   };
 
@@ -55,6 +57,34 @@ define([
     _setMapEvents: function() {
       this.map.on('zoomend', _.bind(this._onZoomEnd, this));
       this.map.on('moveend', _.bind(this._onCenterChange, this));
+    },
+
+    addProtectedAreasLayer: function() {
+      var options = {
+        user_name: 'simbiotica',
+        type: 'cartodb',
+        sublayers: [{
+          title: 'Protected Areas',
+          slug: 'protected-areas',
+          sql: this.getPASql(2014),
+          cartocss: PROTECTED_AREAS_CSS
+        }]
+      };
+
+      cartodb.createLayer(this.map, options)
+        .addTo(this.map)
+        .done(_.bind(function(layer) {
+          this.PALayer = layer.getSubLayer(0);
+        }, this));
+    },
+
+    updateProtectedAreas: function(date) {
+      var sql = this.getPASql(date.getFullYear());
+      this.PALayer.setSQL(sql);
+    },
+
+    getPASql: function(year) {
+      return _.str.sprintf(PROTECTED_AREAS_PSQL, {year: year});
     },
 
     /**

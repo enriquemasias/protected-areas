@@ -13,7 +13,8 @@ require.config({
     uri: '../../bower_components/uri-templates/uri-templates',
     moment: '../../bower_components/moment/moment',
     underscoreString: '../../bower_components/underscore.string/lib/underscore.string',
-    handlebars: '../../bower_components/handlebars/handlebars'
+    handlebars: '../../bower_components/handlebars/handlebars',
+    d3: '../../bower_components/d3/d3'
   },
 
   shim: {
