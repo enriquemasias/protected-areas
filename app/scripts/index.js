@@ -51,4 +51,9 @@ require([
   window.mps = mps;
 
   new Router();
+  setTimeout(function() {
+    window.a = new Date();
+    window.a.setYear(1995);
+    window.mps.publish('Timeline/date-change', [a])
+  }, 0);
 });

@@ -5,8 +5,9 @@ define([
   'presenters/RouterPresenter',
   'presenters/MapPresenter',
   'presenters/TimelinePresenter',
+  'presenters/StoryPresenter',
   'helpers/underscoreMixinsHelper'
-], function(_, Backbone, Handlebars, Presenter, MapPresenter, TimelinePresenter) {
+], function(_, Backbone, Handlebars, Presenter, MapPresenter, TimelinePresenter, StoryPresenter) {
 
   'use strict';
 
@@ -33,6 +34,8 @@ define([
         // Set router-registrable presenters
         new MapPresenter();
         new TimelinePresenter();
+        new StoryPresenter();
+
       }
 
       var params = _.extend({
