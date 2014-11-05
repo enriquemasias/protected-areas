@@ -1,7 +1,0 @@
-#protected_areas{
-  polygon-fill: #89a87b;
-  polygon-opacity: 0.7;
-  line-color: #555;
-  line-width: 0;
-  line-opacity: 1;
-}
