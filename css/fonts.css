@@ -1,0 +1,36 @@
+@font-face {
+  font-family: 'akzidenz-grotesk_bq_superRg';
+  src: url('../fonts/AkzidenzGrotesk-Super.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'akzidenz-grotesk_bqmedium';
+  src: url('../fonts/AkzidenzGrotesk-Medium.otf');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'akzidenz-grotesk_bqregular';
+  src: url('../fonts/AkzidenzGrotesk-Regular.otf');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'akzidenz-grotesk_bqbold';
+  src: url('../fonts/AkzidenzGrotesk-Bold.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'akzidenz-grotesk_bq_lightRg';
+  src: url('../fonts/AkzidenzGrotesk-Light.otf');
+  font-weight: normal;
+  font-style: normal;
+}
