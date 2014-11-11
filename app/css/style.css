@@ -2,6 +2,11 @@
   background: #6aae3c url(../img/background.png);
   background-size: cover;
 }
+
+.leaflet-marker-icon {
+  margin-left: -23px !important;
+}
+
 .slide-tip-1021 {
 	left: 293.5px !important;
 }
@@ -24,8 +29,9 @@ div.cartodb-timeslider {
 /* Slider */
 #slides_container {
 	top: 50%;
-	width: 560px;
-	background-color: transparent;
+  margin-top: 30px;
+	width: 400px;
+	background-color: rgba(87, 124, 29, .7);
 	-webkit-transform: translatey(-50%);
   -ms-transform: translatey(-50%);
   transform: translatey(-50%);

@@ -1,50 +1,5 @@
 $(document).ready(function() {
 
-  var resizePID;
-
-  function clearResize() {
-    clearTimeout(resizePID);
-    resizePID = setTimeout(function() {
-      adjustSlides();
-    }, 100);
-  }
-
-  if (!window.addEventListener) {
-    window.attachEvent("resize", function load(event) {
-      clearResize();
-    });
-  } else {
-    window.addEventListener("resize", function load(event) {
-      clearResize();
-    });
-  }
-
-  function resizeWindow() {
-    adjustSlides();
-  }
-
-  function adjustSlides() {
-    var container = document.getElementById("slides_container"),
-      slide = document.querySelectorAll('.selected_slide')[0];
-
-    if (container && slide) {
-      if (slide.offsetHeight + 80 + 40 + 160 >= window.innerHeight) {
-        container.style.bottom = "160px";
-        var h = container.offsetHeight;
-
-        slide.style.height = h - 80 + "px";
-      } else {
-        container.style.bottom = "auto";
-        container.style.minHeight = "0";
-        slide.style.height = "auto";
-      }
-    }
-  }
-
-  var resizeAction = O.Action(function() {
-    adjustSlides();
-  });
-
   function torque(layer) {
     function _torque() {}
 
@@ -172,16 +127,19 @@ $(document).ready(function() {
 
       // var baseurl = this.baseurl = 'https://{s}.tiles.mapbox.com/v4/smbtc.k6n48gb6/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA#3/17.98/-2.81';
       var map = this.map = L.map('map', {
+        center: [20.1385, -46.0547],
+        minZoom: 1,
+        zoom: 2,
         maxZoom: 3,
         zoomControl: false
-      }).setView([0, 0.0], 4);
+      });
       // var basemap = this.basemap = L.tileLayer(baseurl, {
       //   attribution: 'data OSM - map CartoDB'
       // }).addTo(map);
       this.duration = '18';
 
       var slides = this.slides = O.Actions.Slides('slides');
-      var story = this.story = O.Story()
+      var story = this.story = O.Story();
     },
 
     _resetActions: function(actions) {
@@ -209,15 +167,14 @@ $(document).ready(function() {
         var ac = O.Parallel(
           O.Actions.CSS($("#slides_container")).addClass('visible'),
           this.slides.activate(i),
-          slide(this),
-          resizeAction
+          slide(this)
+          // resizeAction
         );
 
         if (!slide.get('step')) return;
 
         this.story.addState(
-          torque(this.torqueLayer).reach(slide),
-          ac
+          torque(this.torqueLayer).reach(slide), ac
         )
       }
     },
@@ -228,12 +185,6 @@ $(document).ready(function() {
       if ($("#slides_container").hasClass("visible")) {
         $("#slides_container").removeClass("visible");
       }
-
-      // if (this.baseurl && (this.baseurl !== actions.global.baseurl)) {
-      //   this.baseurl = actions.global.baseurl || 'https://{s}.tiles.mapbox.com/v4/smbtc.k6n48gb6/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA#3/17.98/-2.81';
-
-      //   this.basemap.setUrl(this.baseurl);
-      // }
 
       if (this.duration && (this.duration !== actions.global.duration)) {
         this.duration = actions.global.duration || 18;
@@ -254,14 +205,14 @@ $(document).ready(function() {
         if (!this.created) { // sendCode debounce < vis loader
           cdb.vis.Loader.get(actions.global.vizjson, function(vizjson) {
             // find index for the torque layer
-            for (var i = 0; i < vizjson.layers.length; ++i) {
-              if (i > 0) {
+            for (var i = vizjson.layers.length; i > 0; --i) {
+              if (i !== 0) {
                 cartodb.createLayer(self.map, vizjson, {
-                    layerIndex: i
+                    layerIndex: i -1
                   })
                   .done(function(layer) {
                     if (layer.type === 'torque') {
-                      self.map.fitBounds(vizjson.bounds);
+                      // self.map.fitWorld();
 
                       actions.global.duration && layer.setDuration(actions.global.duration);
 
