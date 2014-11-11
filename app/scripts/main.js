@@ -172,7 +172,8 @@ $(document).ready(function() {
 
       // var baseurl = this.baseurl = 'https://{s}.tiles.mapbox.com/v4/smbtc.k6n48gb6/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA#3/17.98/-2.81';
       var map = this.map = L.map('map', {
-        maxZoom: 3
+        maxZoom: 3,
+        zoomControl: false
       }).setView([0, 0.0], 4);
       // var basemap = this.basemap = L.tileLayer(baseurl, {
       //   attribution: 'data OSM - map CartoDB'
