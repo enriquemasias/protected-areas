@@ -8,7 +8,7 @@
 }
 
 .slide-tip-1021 {
-	left: 293.5px !important;
+  left: 293.5px !important;
 }
 
 div.cartodb-timeslider {
@@ -23,38 +23,84 @@ div.cartodb-timeslider {
   -webkit-transform: translatex(-50%);
   -ms-transform: translatex(-50%);
   transform: translatex(-50%);
+  background: none;
+  }
+
+div.cartodb-timeslider p {
+  color: white;
+  -webkit-font-smoothing: antialiased;
 }
 
 
 /* Slider */
 #slides_container {
-	top: 50%;
-  margin-top: 30px;
-	width: 400px;
-	background-color: rgba(87, 124, 29, .7);
-	-webkit-transform: translatey(-50%);
+  top: 50%;
+  width: 400px;
+  background-color: rgba(87, 124, 29, .7);
+  -webkit-transform: translatey(-50%);
   -ms-transform: translatey(-50%);
   transform: translatey(-50%);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 #slides_container h1 {
-	line-height: .9 !important;
-	color: #fff;
+  line-height: .9 !important;
+  color: #fff;
 }
 
 #slides_container p {
-	font: 18px normal 'akzidenz-grotesk_bqregular';
-	line-height: 1.5;
-	color: #fff !important;
+  font: 18px normal 'akzidenz';
+  line-height: 1.5;
+  color: #fff !important;
+}
+
+.slide-tip {
+  display: none;
+  border-bottom: none;
+}
+
+div.cartodb-timeslider {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+div.cartodb-timeslider a.button {
+  background: url('../img/slider.png') no-repeat -2px -55px;
+}
+
+div.cartodb-timeslider .ui-slider {
+  background: rgba(0,0,0,0.3);
+}
+
+.slide-tip .tooltip {
+  background: rgba(87, 124, 29, .7);
+}
+
+div.cartodb-timeslider .ui-slider .ui-slider-range {
+  background: white;
+}
+
+div.cartodb-timeslider ul li {
+  border: none;
+}
+
+div.cartodb-timeslider .ui-slider .ui-slider-handle {
+  background: white;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
 }
 
 #slides
 
-	h1 {
-		font: 40px normal 'akzidenz-grotesk_bqbold';
-		margin-bottom: 15px;
-	}
-	h1::after {
-		display: none !important;
-	}
+  h1 {
+    font-family: 'akzidenz';
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  h1::after {
+    display: none !important;
+  }
 }
