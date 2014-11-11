@@ -170,13 +170,13 @@ $(document).ready(function() {
       var self = this;
 
 
-      var baseurl = this.baseurl = 'https://{s}.tiles.mapbox.com/v4/smbtc.k6n48gb6/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA#3/17.98/-2.81';
+      // var baseurl = this.baseurl = 'https://{s}.tiles.mapbox.com/v4/smbtc.k6n48gb6/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA#3/17.98/-2.81';
       var map = this.map = L.map('map', {
         maxZoom: 3
       }).setView([0, 0.0], 4);
-      var basemap = this.basemap = L.tileLayer(baseurl, {
-        attribution: 'data OSM - map CartoDB'
-      }).addTo(map);
+      // var basemap = this.basemap = L.tileLayer(baseurl, {
+      //   attribution: 'data OSM - map CartoDB'
+      // }).addTo(map);
       this.duration = '18';
 
       var slides = this.slides = O.Actions.Slides('slides');
@@ -228,11 +228,11 @@ $(document).ready(function() {
         $("#slides_container").removeClass("visible");
       }
 
-      if (this.baseurl && (this.baseurl !== actions.global.baseurl)) {
-        this.baseurl = actions.global.baseurl || 'https://{s}.tiles.mapbox.com/v4/smbtc.k6n48gb6/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA#3/17.98/-2.81';
+      // if (this.baseurl && (this.baseurl !== actions.global.baseurl)) {
+      //   this.baseurl = actions.global.baseurl || 'https://{s}.tiles.mapbox.com/v4/smbtc.k6n48gb6/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA#3/17.98/-2.81';
 
-        this.basemap.setUrl(this.baseurl);
-      }
+      //   this.basemap.setUrl(this.baseurl);
+      // }
 
       if (this.duration && (this.duration !== actions.global.duration)) {
         this.duration = actions.global.duration || 18;
@@ -253,36 +253,36 @@ $(document).ready(function() {
         if (!this.created) { // sendCode debounce < vis loader
           cdb.vis.Loader.get(actions.global.vizjson, function(vizjson) {
             // find index for the torque layer
-            function torqueLayerIndex() {
-              for (var i = 0; i < vizjson.layers.length; ++i) {
-                if (vizjson.layers[i].type === 'torque') return i;
-              }
-              return -1;
-            }
-            var torqueIndex = torqueLayerIndex();
-            if (torqueIndex >= 0) {
-              cartodb.createLayer(self.map, vizjson, {
-                  layerIndex: torqueIndex
-                })
-                .done(function(layer) {
-                  self.map.fitBounds(vizjson.bounds);
+            for (var i = 0; i < vizjson.layers.length; ++i) {
+              if (i > 0) {
+                cartodb.createLayer(self.map, vizjson, {
+                    layerIndex: i
+                  })
+                  .done(function(layer) {
+                    if (layer.type === 'torque') {
+                      self.map.fitBounds(vizjson.bounds);
 
-                  actions.global.duration && layer.setDuration(actions.global.duration);
+                      actions.global.duration && layer.setDuration(actions.global.duration);
 
-                  self.torqueLayer = layer;
-                  self.torqueLayer.stop();
+                      self.torqueLayer = layer;
+                      self.torqueLayer.stop();
 
-                  self.map.addLayer(self.torqueLayer);
+                      self.map.addLayer(self.torqueLayer);
 
-                  self.torqueLayer.on('change:steps', function() {
-                    self.torqueLayer.play();
-                    self.torqueLayer.actions = torque(self.torqueLayer);
-                    self._resetActions(actions);
+                      self.torqueLayer.on('change:steps', function() {
+                        self.torqueLayer.play();
+                        self.torqueLayer.actions = torque(self.torqueLayer);
+                        self._resetActions(actions);
+                      });
+                    } else {
+                      self.map.addLayer(layer);
+                    }
+                  }).on('error', function(err) {
+                    console.log("some error occurred: " + err);
                   });
-                }).on('error', function(err) {
-                  console.log("some error occurred: " + err);
-                });
+              }
             }
+            return -1;
           });
 
           this.created = true;
