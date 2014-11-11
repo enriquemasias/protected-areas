@@ -24,6 +24,7 @@ module.exports = function(grunt) {
             '*.{ico,png,txt}',
             '{,*/}*.html',
             'fonts/*.*',
+            'scripts/*.*',
             'css/*.*'
           ]
         }]
