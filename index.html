@@ -13,7 +13,6 @@
   <link rel="stylesheet" href="http://cartodb.github.io/odyssey.js/sandbox/css/slides.css">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <script src="http://cartodb.github.io/odyssey.js/vendor/modernizr-2.6.2.min.js"></script>
-
 </head>
 <body>
   <div id="map" style="width: 100%; height: 100%"></div>
@@ -25,302 +24,21 @@
     <span class="title" id="title">Title</span>
     <span class="author"><b id="author">By Name using</b> <a href="#">Odyssey.js</a><span>
   </span></span></div>
-
   <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
   <script src="http://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/cartodb.js"></script>
-  <script src="http://cartodb.github.io/odyssey.js/dist/odyssey.js" charset="UTF-8"></script>
-
-  <script>
-    var resizePID;
-
-    function clearResize() {
-      clearTimeout(resizePID);
-      resizePID = setTimeout(function() { adjustSlides(); }, 100);
-    }
-
-    if (!window.addEventListener) {
-      window.attachEvent("resize", function load(event) {
-        clearResize();
-      });
-    } else {
-      window.addEventListener("resize", function load(event) {
-        clearResize();
-      });
-    }
-
-    function resizeWindow() {
-      adjustSlides();
-    }
-
-    function adjustSlides() {
-      var container = document.getElementById("slides_container"),
-          slide = document.querySelectorAll('.selected_slide')[0];
-
-      if (container && slide) {
-        if (slide.offsetHeight+80+40+160 >= window.innerHeight) {
-          container.style.bottom = "160px";
-          var h = container.offsetHeight;
-
-          slide.style.height = h-80+"px";
-        } else {
-          container.style.bottom = "auto";
-          container.style.minHeight = "0";
-          slide.style.height = "auto";
-        }
-      }
-    }
-
-    var resizeAction = O.Action(function() {
-      adjustSlides();
-    });
-
-    function torque(layer) {
-      function _torque() {}
-
-      _torque.reach = function (slide) {
-        var i = slide.get('step').value;
-
-        function formaterForRange(start, end) {
-          start = start.getTime ? start.getTime(): start;
-          end = end.getTime ? end.getTime(): end;
-          var span = (end - start)/1000;
-          var ONE_DAY = 3600*24;
-          var ONE_YEAR = ONE_DAY * 31 * 12;
-          function pad(n) { return n < 10 ? '0' + n : n; };
-
-          // lest than a day
-          if (span < ONE_DAY) return function(t) { return pad(t.getUTCHours()) + ":" + pad(t.getUTCMinutes()); };
-          if (span < ONE_YEAR) return function(t) { return pad(t.getUTCMonth() + 1) + "/" + pad(t.getUTCDate()) + "/" + pad(t.getUTCFullYear()); };
-          return function(t) { return pad(t.getUTCMonth() + 1) + "/" + pad(t.getUTCFullYear()); };
-        }
-
-        function getTimeOrStep(s) {
-          var tb = layer.getTimeBounds();
-          if (!tb) return;
-          if (tb.columnType === 'date') {
-            if (tb && tb.start !== undefined) {
-              var f = formaterForRange(tb.start, tb.end);
-              // avoid showing invalid dates
-              if (!_.isNaN(layer.stepToTime(s).getYear())) {
-                return f(layer.stepToTime(s));
-              }
-            }
-          } else {
-            return s;
-          }
-        }
-
-        function truncate(s, length) {
-          return s.substr(0, length-1) + (s.length > length ? '…' : '');
-        }
-
-        var parser = new DOMParser(),
-            doc = parser.parseFromString(slide.html(), 'text/html');
-
-        var l = i*$('.slider').width()/layer.options.steps,
-            tooltip = ['<div class="slide-tip slide-tip-'+i+'" style="left:'+l+'px">',
-                       '<div class="tooltip">',
-                       '<h1>'+getTimeOrStep(i)+'</h1>',
-                       $(doc).find('h1').text(),
-                       '</div>',
-                       '</div>'].join("\n");
-
-        $('.slider').append(tooltip);
-        var $tip = $('.slide-tip-'+i+' .tip'),
-            $tooltip = $('.slide-tip-'+i+' .tooltip'),
-            w = $tip.width()/2
-
-        $tip.css({ margin: -w });
-
-        var t = O.Trigger({});
-
-        function check(changes) {
-          if (changes.step >= i-2 && changes.step < i+2) {
-            t.trigger();
-
-            if (!$tooltip.is(':visible')) {
-              $tooltip.fadeIn(150);
-            }
-          } else if (changes.step >= i+2 && changes.step < i+5) {
-            setTimeout(function() {
-              $('.tooltip').fadeOut(150);
-            }, 2000);
-          }
-        };
-
-        layer.on('change:time', check);
-        t.clear = function() {
-          layer.off('change:time', check);
-        }
-        return t;
-      }
-
-      _torque.pause = function() {
-        return O.Action(function (){
-          layer.pause();
-        });
-      }
-
-      _torque.play = function() {
-        return O.Action(function () {
-          layer.play()
-        });
-      }
-
-      return _torque;
-    }
-
-    O.Template({
-      actions: {
-        'insert time': function() {
-          return "- step: " + this.torqueLayer.getStep()
-        },
-        'pause': function() {
-          return "S.torqueLayer.actions.pause()";
-        },
-        'play': function() {
-          return "S.torqueLayer.actions.play()";
-        }
-      },
-
-      init: function() {
-        var self = this;
-
-        var baseurl = this.baseurl = 'https://{s}.tiles.mapbox.com/v4/smbtc.k4o9i4oe/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA#3/-4.39/-15.82';
-        var map = this.map = L.map('map', { maxZoom: 3}).setView([0, 0.0], 4);
-        var basemap = this.basemap = L.tileLayer(baseurl, {
-          attribution: 'data OSM - map CartoDB'
-        }).addTo(map);
-        this.duration = '18';
-
-        var slides = this.slides = O.Actions.Slides('slides');
-        var story = this.story = O.Story()
-      },
-
-      _resetActions: function(actions) {
-        // update footer title and author
-        var title_ = actions.global.title === undefined ? '' : actions.global.title,
-            author_ = actions.global.author === undefined ? 'Using' : 'By '+actions.global.author+' using';
-
-        document.getElementById('title').innerHTML = title_;
-        document.getElementById('author').innerHTML = author_;
-        document.title = title_ + " | " + author_ +' Odyssey.js';
-
-        document.getElementById('slides_container').style.display = "block";
-
-        document.getElementById('slides').innerHTML = '';
-
-        // first slide is the header, skip it
-        for(var i = 0; i < actions.length; ++i) {
-          var slide = actions[i];
-          var tmpl = "<div class='slide' style='display:none'>"
-          tmpl += slide.html();
-          tmpl += "</div>";
-
-          document.getElementById('slides').innerHTML += tmpl;
-
-          var ac = O.Parallel(
-            O.Actions.CSS($("#slides_container")).addClass('visible'),
-            this.slides.activate(i),
-            slide(this),
-            resizeAction
-          );
-
-          if (!slide.get('step')) return;
-
-          this.story.addState(
-            torque(this.torqueLayer).reach(slide),
-            ac
-          )
-        }
-      },
-
-      update: function(actions) {
-        var self = this;
-
-        if ($("#slides_container").hasClass("visible")) {
-          $("#slides_container").removeClass("visible");
-        }
-
-        if (this.baseurl && (this.baseurl !== actions.global.baseurl)) {
-          this.baseurl = actions.global.baseurl || 'https://{s}.tiles.mapbox.com/v4/smbtc.k4o9i4oe/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA#3/-4.39/-15.82';
-
-          this.basemap.setUrl(this.baseurl);
-        }
-
-        if (this.duration && (this.duration !== actions.global.duration)) {
-          this.duration = actions.global.duration || 18;
-        }
-
-        if (this.torqueLayer && ("http://"+self.torqueLayer.options.user+".cartodb.com/api/v2/viz/"+self.torqueLayer.options.stat_tag+"/viz.json" !== actions.global.vizjson)) {
-          this.map.removeLayer(this.torqueLayer);
-
-          // hack to stop (not remove) binding
-          this.torqueLayer.stop();
-          $('.cartodb-timeslider').remove();
-          $('.cartodb-legend-stack').remove();
-          this.torqueLayer = null;
-          this.created = false;
-        }
-
-        if (!this.torqueLayer) {
-          if (!this.created) { // sendCode debounce < vis loader
-            cdb.vis.Loader.get(actions.global.vizjson, function(vizjson) {
-              // find index for the torque layer
-              function torqueLayerIndex() {
-                for(var i = 0; i < vizjson.layers.length; ++i) {
-                  if (vizjson.layers[i].type === 'torque') return i;
-                }
-                return -1;
-              }
-              var torqueIndex = torqueLayerIndex();
-              if (torqueIndex >= 0) {
-                cartodb.createLayer(self.map, vizjson, { layerIndex: torqueIndex })
-                  .done(function(layer) {
-                    self.map.fitBounds(vizjson.bounds);
-
-                    actions.global.duration && layer.setDuration(actions.global.duration);
-
-                    self.torqueLayer = layer;
-                    self.torqueLayer.stop();
-
-                    self.map.addLayer(self.torqueLayer);
-
-                    self.torqueLayer.on('change:steps', function() {
-                      self.torqueLayer.play();
-                      self.torqueLayer.actions = torque(self.torqueLayer);
-                      self._resetActions(actions);
-                    });
-                  }).on('error', function(err) {
-                    console.log("some error occurred: " + err);
-                  });
-                }
-            });
-
-            this.created = true;
-          }
-
-          return;
-        }
-
-        this.story.clear();
-
-        $('.slide-tip').remove();
-
-        this._resetActions(actions);
-
-        if (this.created) {
-          this.torqueLayer.setDuration(actions.global.duration);
-          this.torqueLayer.stop();
-          $('.button').removeClass('stop');
-        }
-      }
+  <script type="text/javascript">
+    var marker = L.icon({
+      iconUrl: 'img/marker.svg',
+      iconSize: [38, 38] // size of the icon
     });
   </script>
+  <script src="http://cartodb.github.io/odyssey.js/dist/odyssey.js" charset="UTF-8"></script>
+  <script src="scripts/main.js"></script>
 
 
 
-<script id="md_template" type="text/template">```
+<script id="md_template" type="text/template">
+```
 -title: "The Expansion of Protected Areas Across the World"
 -author: "simbiotica.es"
 -vizjson: "http://simbiotica.cartodb.com/api/v2/viz/c7a62952-60e8-11e4-a25c-0e9d821ea90d/viz.json"
@@ -330,46 +48,39 @@
 ```
 - step: 1
 - center: [20.1385, -46.0547]
-- zoom: 2
+- zoom: 3
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(5000)
 S.torqueLayer.actions.play()
 ```
 
-Since the 19th Century, Protected Areas have been the embodiment of the conservation of our environment, ensuring that the places we treasure still exist for future generations to enjoy. Protected Areas support local economies, help to keep our air and water clean, mitigate against climate change by absorbing carbon dioxide from the atmosphere and provide places for people from all over the world to relax and enjoy natural and cultural wonders. 
+Since the 19th Century, Protected Areas have been the embodiment of the conservation of our environment, ensuring that the places we treasure still exist for future generations to enjoy. Protected Areas support local economies, help to keep our air and water clean, mitigate against climate change by absorbing carbon dioxide from the atmosphere and provide places for people from all over the world to relax and enjoy natural and cultural wonders.
 
 
 # Early Protected Areas Pioneers
 ```
 - step: 250
-- center: [48.4000, -127.4414]
-- zoom: 3
 ```
 
-The first protected areas were established in Canada and the USA to preserve the dramatic wilderness of nature from developments in frontier areas. These early protected areas were established independently at a national level. 
+The first protected areas were established in Canada and the USA to preserve the dramatic wilderness of nature from developments in frontier areas. These early protected areas were established independently at a national level.
 
 # Protecting Nature in Africa
 ```
-- center: [0.7910, 25.1367]
-- zoom: 3
 - step: 380
 ```
 
-At a conference held in London in 1933, one of the first global treaties to protect flora and fauna in nature was agreed. This led to the development of more protected areas in Africa, building on the number of game parks established previously. 
+At a conference held in London in 1933, one of the first global treaties to protect flora and fauna in nature was agreed. This led to the development of more protected areas in Africa, building on the number of game parks established previously.
 
 # Post-war Boom
 ```
 - step: 480
-- center: [18.8959, 2.8125]
 ```
 After the end of World War II we begin to see an increase in the number of protected areas across the world. In particular watch the UK and Central Africa become more protected.
 
 # World Parks Congress I
 ```
 - step: 612
-- center: [46.0732, -122.5195]
-- zoom: 3
-L.marker([47.614848,-122.3359059]).actions.addRemove(S.map)
+L.marker([47.614848,-122.3359059], {icon: marker}).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(3500)
 S.torqueLayer.actions.play()
@@ -380,53 +91,44 @@ The first World Parks Congress was held in Seattle in 1962 during the Seattle Wo
 ```
 - step: 688
 L.marker([44.427963,-110.588455]).actions.addRemove(S.map)
-- zoom: 3
 ```
-A second congress was held in 1972 in Yellowstone National Park, to commemorate its 100th anniversary. This was the same year as the World Heritage Convention was adopted, which set standards for what types of site could be included in the World Heritage List. 
+A second congress was held in 1972 in Yellowstone National Park, to commemorate its 100th anniversary. This was the same year as the World Heritage Convention was adopted, which set standards for what types of site could be included in the World Heritage List.
 
 # World Parks Congress III
 ```
 - step: 768
-- center: [12.4688, 67.8516]
-- zoom: 3
 L.marker([-8.3529, 115.1484]).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(2500)
 S.torqueLayer.actions.play()
 ```
 
-The third World Parks Congress was held in Bali, Indonesia in 1982, attended by more than 450 specialists from 70 countries. By now protected areas are being developed at a rapid pace across the world. 
+The third World Parks Congress was held in Bali, Indonesia in 1982, attended by more than 450 specialists from 70 countries. By now protected areas are being developed at a rapid pace across the world.
 
 # World Parks Congress IV
 ```
 - step: 845
 L.marker([10.4770, -66.8628]).actions.addRemove(S.map)
-- center: [29.3822, -41.2207]
-- zoom: 3
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(2500)
 S.torqueLayer.actions.play()
 ```
-The fourth World Parks Congress, held in Caracas, Venezuela, agreed the 6 IUCN categories for protected areas that are used to this day. The meeting also introduced the need for tools to evaluate the success of protected areas. 
+The fourth World Parks Congress, held in Caracas, Venezuela, agreed the 6 IUCN categories for protected areas that are used to this day. The meeting also introduced the need for tools to evaluate the success of protected areas.
 
 # World Parks Congress V
 ```
 - step: 936
-- zoom: 3
-- center: [-29.8216, 30.9210]
 L.marker([-29.8406, 30.9457]).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(2500)
 S.torqueLayer.actions.play()
 ```
-The most recent World Parks Congress was held in Durban, South Africa, in 2003, with more than 2,700 participants attending from governments, academia and NGOs. The importance of indigenous and local communities in protected areas and the idea of Indigenous and Community Conserved Areas (ICCAs) was brought to the fore. 
+The most recent World Parks Congress was held in Durban, South Africa, in 2003, with more than 2,700 participants attending from governments, academia and NGOs. The importance of indigenous and local communities in protected areas and the idea of Indigenous and Community Conserved Areas (ICCAs) was brought to the fore.
 
 
 # Sydney - 2014
 ```
 - step: 1021
-- center: [22.2688, 41.6602]
-- zoom: 2
 L.marker([-34.3797, 150.6885]).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(12500)
