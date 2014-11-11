@@ -26,12 +26,6 @@
   </span></span></div>
   <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
   <script src="http://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/cartodb.js"></script>
-  <script type="text/javascript">
-    var marker = L.icon({
-      iconUrl: 'img/marker.svg',
-      iconSize: [38, 38] // size of the icon
-    });
-  </script>
   <script src="http://cartodb.github.io/odyssey.js/dist/odyssey.js" charset="UTF-8"></script>
   <script src="scripts/main.js"></script>
 
@@ -41,14 +35,14 @@
 ```
 -title: "The Expansion of Protected Areas Across the World"
 -author: "simbiotica.es"
--vizjson: "http://simbiotica.cartodb.com/api/v2/viz/c7a62952-60e8-11e4-a25c-0e9d821ea90d/viz.json"
+-vizjson: "http://simbiotica.cartodb.com/api/v2/viz/706f5adc-699e-11e4-89ea-0e018d66dc29/viz.json"
 -duration: 75
 ```
 # Protected Areas
 ```
 - step: 1
 - center: [20.1385, -46.0547]
-- zoom: 3
+- zoom: 2
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(5000)
 S.torqueLayer.actions.play()
@@ -80,7 +74,7 @@ After the end of World War II we begin to see an increase in the number of prote
 # World Parks Congress I
 ```
 - step: 612
-L.marker([47.614848,-122.3359059], {icon: marker}).actions.addRemove(S.map)
+L.marker([47.614848,-122.3359059], {icon: L.icon({iconUrl: 'img/marker.svg', iconSize: [38, 38]})}).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(3500)
 S.torqueLayer.actions.play()
@@ -90,14 +84,14 @@ The first World Parks Congress was held in Seattle in 1962 during the Seattle Wo
 # World Parks Congress II
 ```
 - step: 688
-L.marker([44.427963,-110.588455]).actions.addRemove(S.map)
+L.marker([44.427963,-110.588455], {icon: L.icon({iconUrl: 'img/marker.svg', iconSize: [38, 38]})}).actions.addRemove(S.map)
 ```
 A second congress was held in 1972 in Yellowstone National Park, to commemorate its 100th anniversary. This was the same year as the World Heritage Convention was adopted, which set standards for what types of site could be included in the World Heritage List.
 
 # World Parks Congress III
 ```
 - step: 768
-L.marker([-8.3529, 115.1484]).actions.addRemove(S.map)
+L.marker([-8.3529, 115.1484], {icon: L.icon({iconUrl: 'img/marker.svg', iconSize: [38, 38]})}).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(2500)
 S.torqueLayer.actions.play()
@@ -108,7 +102,7 @@ The third World Parks Congress was held in Bali, Indonesia in 1982, attended by 
 # World Parks Congress IV
 ```
 - step: 845
-L.marker([10.4770, -66.8628]).actions.addRemove(S.map)
+L.marker([10.4770, -66.8628], {icon: L.icon({iconUrl: 'img/marker.svg', iconSize: [38, 38]})}).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(2500)
 S.torqueLayer.actions.play()
@@ -118,7 +112,7 @@ The fourth World Parks Congress, held in Caracas, Venezuela, agreed the 6 IUCN c
 # World Parks Congress V
 ```
 - step: 936
-L.marker([-29.8406, 30.9457]).actions.addRemove(S.map)
+L.marker([-29.8406, 30.9457], {icon: L.icon({iconUrl: 'img/marker.svg',iconSize: [38, 38]})}).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(2500)
 S.torqueLayer.actions.play()
@@ -129,9 +123,10 @@ The most recent World Parks Congress was held in Durban, South Africa, in 2003, 
 # Sydney - 2014
 ```
 - step: 1021
-L.marker([-34.3797, 150.6885]).actions.addRemove(S.map)
+L.marker([-34.3797, 150.6885], {icon: L.icon({iconUrl: 'img/marker.svg', iconSize: [38, 38]})}).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(12500)
 S.torqueLayer.actions.play()
 ```
-More than 3,000 people have gathered in Sydney this week to set the agenda for protected areas over the next decade. The world is close to achieving the Aichi Target for protected areas: to have 17% of terrestrial land and 10% of marine and coastal areas protected by 2020. What will come next?</script></body></html>
+More than 3,000 people have gathered in Sydney this week to set the agenda for protected areas over the next decade. The world is close to achieving the Aichi Target for protected areas: to have 17% of terrestrial land and 10% of marine and coastal areas protected by 2020. What will come next?
+</script></body></html>
