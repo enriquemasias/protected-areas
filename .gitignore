@@ -1,6 +1,7 @@
-todo.todo
-node_modules
-bower_components
-test/temp
 .tmp
 .DS_Store
+.grunt
+todo.todo
+/node_modules
+/bower_components
+/dist
