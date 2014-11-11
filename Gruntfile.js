@@ -7,6 +7,12 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
 
+    clean: {
+      dist: [
+        './dist'
+      ]
+    },
+
     copy: {
       dist: {
         files: [{
@@ -34,6 +40,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('build', [
+    'clean:dist',
     'copy'
   ]);
 
