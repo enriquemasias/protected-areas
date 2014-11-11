@@ -1,5 +1,5 @@
 .leaflet-container {
-	background-color: #efefef;
+
 }
 .slide-tip-1021 {
 	left: 293.5px !important;
@@ -19,8 +19,6 @@ div.cartodb-timeslider {
   transform: translatex(-50%);
 }
 
-.cartodb-timeslider .slider {
-}
 
 /* Slider */
 #slides_container {
@@ -34,19 +32,19 @@ div.cartodb-timeslider {
 
 #slides_container h1 {
 	line-height: .9 !important;
-	color: #000;
+	color: #fff;
 }
 
 #slides_container p {
-	font: 24px normal 'akzidenz-grotesk_bqregular';
+	font: 18px normal 'akzidenz-grotesk_bqregular';
 	line-height: 1.5;
-	color: #000 !important;
+	color: #fff !important;
 }
 
-#slides 
+#slides
 
 	h1 {
-		font: 72px normal 'akzidenz-grotesk_bqbold';
+		font: 40px normal 'akzidenz-grotesk_bqbold';
 		margin-bottom: 15px;
 	}
 	h1::after {

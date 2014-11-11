@@ -25,13 +25,14 @@
     <span class="title" id="title">Title</span>
     <span class="author"><b id="author">By Name using</b> <a href="#">Odyssey.js</a><span>
   </span></span></div>
+
   <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
   <script src="http://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/cartodb.js"></script>
   <script type="text/javascript">
     var marker = L.icon({
-    iconUrl: 'img/marker.svg',
-    iconSize: [38, 38] // size of the icon
-  });
+      iconUrl: 'img/marker.svg',
+      iconSize: [38, 25]
+    });
   </script>
   <script src="http://cartodb.github.io/odyssey.js/dist/odyssey.js" charset="UTF-8"></script>
 
@@ -191,8 +192,7 @@
       init: function() {
         var self = this;
 
-
-        var baseurl = this.baseurl = 'https://{s}.tiles.mapbox.com/v4/smbtc.k6n48gb6/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA#3/17.98/-2.81';
+        var baseurl = this.baseurl = 'https://{s}.tiles.mapbox.com/v4/smbtc.k4o9i4oe/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA#3/-4.39/-15.82';
         var map = this.map = L.map('map', { maxZoom: 3}).setView([0, 0.0], 4);
         var basemap = this.basemap = L.tileLayer(baseurl, {
           attribution: 'data OSM - map CartoDB'
@@ -249,7 +249,7 @@
         }
 
         if (this.baseurl && (this.baseurl !== actions.global.baseurl)) {
-          this.baseurl = actions.global.baseurl || 'https://{s}.tiles.mapbox.com/v4/smbtc.k6n48gb6/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA#3/17.98/-2.81';
+          this.baseurl = actions.global.baseurl || 'https://{s}.tiles.mapbox.com/v4/smbtc.k4o9i4oe/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic21idGMiLCJhIjoiVXM4REppNCJ9.pjaLujYj-fcCPv5evG_0uA#3/-4.39/-15.82';
 
           this.basemap.setUrl(this.baseurl);
         }
@@ -326,8 +326,7 @@
 
 
 
-<script id="md_template" type="text/template">
-```
+<script id="md_template" type="text/template">```
 -title: "The Expansion of Protected Areas Across the World"
 -author: "simbiotica.es"
 -vizjson: "http://simbiotica.cartodb.com/api/v2/viz/c7a62952-60e8-11e4-a25c-0e9d821ea90d/viz.json"
@@ -336,8 +335,7 @@
 # Protected Areas
 ```
 - step: 1
-- center: [20.1385, -46.0547]
-- zoom: 2
+
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(5000)
 S.torqueLayer.actions.play()
@@ -347,56 +345,37 @@ Since the 19th Century, Protected Areas have been the embodiment of the conserva
 
 
 # Early Protected Areas Pioneers
-```
-- step: 250
-- center: [48.4000, -127.4414]
-- zoom: 3
-```
 
 The first protected areas were established in Canada and the USA to preserve the dramatic wilderness of nature from developments in frontier areas. These early protected areas were established independently at a national level.
 
 # Protecting Nature in Africa
-```
-- center: [0.7910, 25.1367]
-- zoom: 3
-- step: 380
-```
 
 At a conference held in London in 1933, one of the first global treaties to protect flora and fauna in nature was agreed. This led to the development of more protected areas in Africa, building on the number of game parks established previously.
 
 # Post-war Boom
-```
-- step: 480
-- center: [18.8959, 2.8125]
-```
+
 After the end of World War II we begin to see an increase in the number of protected areas across the world. In particular watch the UK and Central Africa become more protected.
 
 # World Parks Congress I
 ```
 - step: 612
-- center: [46.0732, -122.5195]
-- zoom: 3
 L.marker([47.614848,-122.3359059], {icon: marker}).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(3500)
 S.torqueLayer.actions.play()
 ```
-The first World Parks Congress was held in Seattle in 1962 during the Seattle World's Fair, with 145 delegates from 63 countries attending. 28 recommmendations were made, setting the agenda for global conservation for the next decade.
+The first World Parks Congress was held in Seattle in 1962 during the Seattle Worlds Fair, with 145 delegates from 63 countries attending. 28 recommmendations were made, setting the agenda for global conservation for the next decade.
 
 # World Parks Congress II
 ```
-- step: 688
 L.marker([44.427963,-110.588455]).actions.addRemove(S.map)
-- zoom: 3
 ```
 A second congress was held in 1972 in Yellowstone National Park, to commemorate its 100th anniversary. This was the same year as the World Heritage Convention was adopted, which set standards for what types of site could be included in the World Heritage List.
 
 # World Parks Congress III
 ```
 - step: 768
-- center: [12.4688, 67.8516]
-- zoom: 3
-L.marker([-8.3529, 115.1484]).actions.addRemove(S.map)
+L.marker([-8.3529, 115.1484], {icon: marker}).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(2500)
 S.torqueLayer.actions.play()
@@ -407,9 +386,7 @@ The third World Parks Congress was held in Bali, Indonesia in 1982, attended by 
 # World Parks Congress IV
 ```
 - step: 845
-L.marker([10.4770, -66.8628]).actions.addRemove(S.map)
-- center: [29.3822, -41.2207]
-- zoom: 3
+L.marker([10.4770, -66.8628], {icon: marker}).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(2500)
 S.torqueLayer.actions.play()
@@ -419,9 +396,7 @@ The fourth World Parks Congress, held in Caracas, Venezuela, agreed the 6 IUCN c
 # World Parks Congress V
 ```
 - step: 936
-- zoom: 3
-- center: [-29.8216, 30.9210]
-L.marker([-29.8406, 30.9457]).actions.addRemove(S.map)
+L.marker([-29.8406, 30.9457], {icon: marker}).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(2500)
 S.torqueLayer.actions.play()
@@ -432,9 +407,7 @@ The most recent World Parks Congress was held in Durban, South Africa, in 2003, 
 # Sydney - 2014
 ```
 - step: 1021
-- center: [22.2688, 41.6602]
-- zoom: 2
-L.marker([-34.3797, 150.6885]).actions.addRemove(S.map)
+L.marker([-34.3797, 150.6885], {icon: marker}).actions.addRemove(S.map)
 S.torqueLayer.actions.pause()
 O.Actions.Sleep(12500)
 S.torqueLayer.actions.play()
